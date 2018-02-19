@@ -17,6 +17,8 @@ defmodule TaskTrackWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    resources "/users", UsersController
+    resources "/tasks", TasksController
   end
 
   # Other scopes may use custom stacks.

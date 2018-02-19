@@ -1,0 +1,33 @@
+<h2>Show Tasks</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @tasks.title %>
+  </li>
+
+  <li>
+    <strong>Desc:</strong>
+    <%= @tasks.desc %>
+  </li>
+
+  <li>
+    <strong>Est time:</strong>
+    <%= @tasks.est_time %>
+  </li>
+
+  <li>
+    <strong>Act time:</strong>
+    <%= @tasks.act_time %>
+  </li>
+
+  <li>
+    <strong>Completed:</strong>
+    <%= @tasks.completed %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: tasks_path(@conn, :edit, @tasks) %></span>
+<span><%= link "Back", to: tasks_path(@conn, :index) %></span>
