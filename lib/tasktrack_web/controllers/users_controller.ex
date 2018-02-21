@@ -19,7 +19,7 @@ defmodule TaskTrackWeb.UsersController do
       {:ok, users} ->
         conn
         |> put_flash(:info, "User created successfully.")
-        |> redirect(to: users_path(conn, :show, users))
+        |> redirect(to: page_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

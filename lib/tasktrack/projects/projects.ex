@@ -20,16 +20,8 @@ defmodule TaskTrack.Projects do
   """
   def list_tasks do
     Repo.all(Tasks)
-  end
-  
-  def list_tasks_with_requester(requester) do
-    Repo.all(Tasks)
-    |> Enum.filter(fn(x) -> x.requester_id == requester end)
-  end
-  
-  def list_tasks_with_assignee(assignee) do
-    Repo.all(Tasks)
-    |> Enum.filter(fn(x) -> x.assignee_id == assignee end)
+    |> Repo.preload(:requester)
+    |> Repo.preload(:assignee)
   end
 
   @doc """
@@ -65,12 +57,23 @@ defmodule TaskTrack.Projects do
 
   """
   def create_tasks(attrs \\ %{}) do
-    attrs = attrs
-    |> Map.put("requester_id", Accounts.get_users(attrs |> Map.get("requester_id")))
-    |> Map.put("assignee_id", Accounts.get_users(attrs |> Map.get("assignee_id")))
-    IO.inspect(attrs)
     %Tasks{}
     |> Tasks.changeset(attrs)
+    |> Ecto.Changeset.validate_change(:act_time, fn :act_time, act_time ->
+      act_time = act_time
+      if rem(act_time, 15) != 0 do
+	[act_time: "must be div by 15"]
+      else
+	[]
+      end
+    end)
+    |> Ecto.Changeset.validate_change(:est_time, fn :est_time, est_time ->
+      if rem(est_time, 15) != 0 do
+	[est_time: "must be div by 15"]
+      else
+	[]
+      end
+    end)
     |> Repo.insert()
   end
 
@@ -89,6 +92,21 @@ defmodule TaskTrack.Projects do
   def update_tasks(%Tasks{} = tasks, attrs) do
     tasks
     |> Tasks.changeset(attrs)
+    |> Ecto.Changeset.validate_change(:act_time, fn :act_time, act_time ->
+      act_time = act_time
+      if rem(act_time, 15) != 0 do
+	[act_time: "must be div by 15"]
+      else
+	[]
+      end
+    end)
+    |> Ecto.Changeset.validate_change(:est_time, fn :est_time, est_time ->
+      if rem(est_time, 15) != 0 do
+	[est_time: "must be div by 15"]
+      else
+	[]
+      end
+    end)
     |> Repo.update()
   end
 

@@ -7,36 +7,63 @@
 
   <div class="form-group">
     <%= label f, :title, class: "control-label" %>
-    <%= text_input f, :title, class: "form-control", placeholder: "title" %>
-    <%= error_tag f, :title %>
+    <%= if @tasks.requester == @current_user do %>
+      <%= text_input f, :title, class: "form-control", placeholder: "title" %>
+      <%= error_tag f, :title %>
+    <% else %>
+      <br/><%= @tasks.title %>
+    <% end %>
   </div>
 
   <div class="form-group">
     <%= label f, :desc, class: "control-label" %>
-    <%= textarea f, :desc, class: "form-control", placeholder: "description" %>
-    <%= error_tag f, :desc %>
+    <%= if @tasks.requester == @current_user do %>
+      <%= textarea f, :desc, class: "form-control", placeholder: "description" %>
+      <%= error_tag f, :desc %>
+    <% else %>
+      <br/><%= @tasks.desc %>
+    <% end %>
   </div>
 
   <div class="form-group">
-    <%= label f, :est_time, class: "control-label", value: 0 %>
-    <%= number_input f, :est_time, class: "form-control" %>
-    <%= error_tag f, :est_time %>
+    <%= label f, :est_time, class: "control-label" %>
+    <%= if @tasks.requester == @current_user do %>
+      <%= number_input f, :est_time, class: "form-control", step: 15 %>
+      <%= error_tag f, :est_time %>
+    <% else %>
+      <br/><%= @tasks.est_time %>
+    <% end %>
   </div>
 
   <div class="form-group">
     <%= label f, :act_time, class: "control-label" %>
-    <%= number_input f, :act_time, class: "form-control", value: 0 %>
-    <%= error_tag f, :act_time %>
+    <%= if @tasks.assignee == @current_user do %>
+      <%= number_input f, :act_time, class: "form-control", step: 15 %>
+      <%= error_tag f, :act_time %>
+    <% else %>
+      <br/><%= @tasks.act_time %>
+    <% end %>
   </div>
 
   <div class="form-group">
     <%= label f, :completed, class: "control-label" %>
-    <%= checkbox f, :completed, class: "checkbox" %>
-    <%= error_tag f, :completed %>
+    <%= if @tasks.assignee == @current_user or @tasks.requester == @current_user do %>
+      <%= checkbox f, :completed, class: "checkbox" %>
+      <%= error_tag f, :completed %>
+    <% else %>
+      <br/>
+      <%= if @tasks.completed do %>
+	Yes
+      <% else %>
+	No
+      <% end %>
+    <% end %>
   </div>
   
   <div class="form-group">
-    <%= hidden_input f, :requester_id, class: "form-control", value: @current_user.id %>
+    <%= label f, :requester_id, class: "control-label" %>
+    <br/> <%= @tasks.requester.name %> (<%= @tasks.requester.username %>)
+    <%= hidden_input f, :requester_id, class: "form-control", value: @tasks.requester_id %>
   </div>
   
   <div class="form-group">
@@ -49,3 +76,4 @@
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
+

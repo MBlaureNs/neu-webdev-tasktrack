@@ -25,7 +25,8 @@ defmodule TaskTrackWeb.TasksController do
         |> put_flash(:info, "Tasks created successfully.")
         |> redirect(to: tasks_path(conn, :show, tasks))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+	userlist = Repo.all(Users) |> Enum.map(&{&1.name<>" ("<>&1.username<>")", &1.id})
+        render(conn, "new.html", changeset: changeset, userlist: userlist)
     end
   end
 

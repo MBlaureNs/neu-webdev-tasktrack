@@ -1,4 +1,4 @@
-<h2>Show Tasks</h2>
+<h2>Show Task ID: <%= @tasks.id %></h2>
 <ul>
 
   <li>
@@ -23,13 +23,17 @@
 
   <li>
     <strong>Completed:</strong>
-    <%= @tasks.completed %>
+    <%= if @tasks.completed do %>
+      Yes
+    <% else %>
+      No
+    <% end %>
   </li>
 
   <li>
     <strong>Requester:</strong>
     <%= if @tasks.requester_id do %>
-      <%= @tasks.requester_id.name %>
+      <%= @tasks.requester.name %> (<%= @tasks.requester.username %>)
     <% else %>
       None
     <% end %>
@@ -38,7 +42,7 @@
   <li>
     <strong>Assignee:</strong>
     <%= if @tasks.assignee_id do %>
-      <%= @tasks.assignee_id.name %>
+      <%= @tasks.assignee.name %> (<%= @tasks.assignee.username %>)
     <% else %>
       None
     <% end %>

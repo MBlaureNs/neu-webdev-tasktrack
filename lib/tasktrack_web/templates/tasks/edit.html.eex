@@ -1,4 +1,4 @@
-<h2>Edit Task ID: @tasks</h2>
+<h2>Edit Task ID: <%= @tasks.id %></h2>
 
 <%= render "form.html", Map.put(assigns, :action, tasks_path(@conn, :update, @tasks)) %>
 

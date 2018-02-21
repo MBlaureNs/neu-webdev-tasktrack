@@ -1,4 +1,4 @@
-<h2>Listing Tasks</h2>
+<h2>Tasks</h2>
 
 <table class="table">
   <thead>
@@ -10,28 +10,33 @@
       <th>Completed</th>
       <th>Requester</th>
       <th>Assignee</th>
-
       <th></th>
     </tr>
   </thead>
   <tbody>
-<%= for tasks <- @tasks do %>
+  <%= for tasks <- @tasks do %>
     <tr>
       <td><%= tasks.title %></td>
       <td><%= tasks.desc %></td>
       <td><%= tasks.est_time %></td>
       <td><%= tasks.act_time %></td>
-      <td><%= tasks.completed %></td>
+      <td>
+	<%= if tasks.completed do %>
+	  Y
+	<% else %>
+	  N
+	<% end %>
+      </td>
       <td>
 	<%= if tasks.requester_id do %>
-	  <%= tasks.requester_id %>
+	  <%= tasks.requester.name %> (<%= tasks.requester.username %>)
 	<% else %>
 	  None
 	<% end %>
       </td>
       <td>
 	<%= if tasks.assignee_id do %>
-	  <%= tasks.assignee_id %>
+	  <%= tasks.assignee.name %> (<%= tasks.assignee.username %>)
 	<% else %>
 	  None
 	<% end %>
