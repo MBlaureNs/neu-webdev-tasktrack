@@ -21,6 +21,7 @@ mix deps.get
 (cd assets && npm install)
 (cd assets && ./node_modules/brunch/bin/brunch b -p)
 mix phx.digest
+
 mix release --env=prod
 
 mkdir -p ~/www
@@ -36,10 +37,9 @@ mkdir -p ~/www/tasktrack
 REL_TAR=~/src/tasktrack/_build/prod/rel/tasktrack/releases/0.0.1/tasktrack.tar.gz
 (cd ~/www/tasktrack && tar xzvf $REL_TAR)
 
-createuser -d tasktrack-prod
-prod mix ecto.drop
-prod mix ecto.create
-prod mix ecto.migrate
+MIX_ENV=prod mix ecto.create
+MIX_ENV=prod mix ecto.migrate
+
 
 crontab - <<CRONTAB
 @reboot bash /home/memory/src/tasktrack/start.sh
