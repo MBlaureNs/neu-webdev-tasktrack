@@ -1,4 +1,4 @@
-<h2>New Users</h2>
+<h2>Register New User</h2>
 
 <%= render "form.html", Map.put(assigns, :action, users_path(@conn, :create)) %>
 

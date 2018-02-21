@@ -7,25 +7,25 @@
 
   <div class="form-group">
     <%= label f, :title, class: "control-label" %>
-    <%= text_input f, :title, class: "form-control" %>
+    <%= text_input f, :title, class: "form-control", placeholder: "title" %>
     <%= error_tag f, :title %>
   </div>
 
   <div class="form-group">
     <%= label f, :desc, class: "control-label" %>
-    <%= textarea f, :desc, class: "form-control" %>
+    <%= textarea f, :desc, class: "form-control", placeholder: "description" %>
     <%= error_tag f, :desc %>
   </div>
 
   <div class="form-group">
-    <%= label f, :est_time, class: "control-label" %>
+    <%= label f, :est_time, class: "control-label", value: 0 %>
     <%= number_input f, :est_time, class: "form-control" %>
     <%= error_tag f, :est_time %>
   </div>
 
   <div class="form-group">
     <%= label f, :act_time, class: "control-label" %>
-    <%= number_input f, :act_time, class: "form-control" %>
+    <%= number_input f, :act_time, class: "form-control", value: 0 %>
     <%= error_tag f, :act_time %>
   </div>
 
@@ -36,14 +36,12 @@
   </div>
   
   <div class="form-group">
-    <%= label f, :requester_id, class: "control-label" %>
-    <%= text_input f, :requester_id, class: "form-control" %>
-    <%= error_tag f, :requester_id %>
+    <%= hidden_input f, :requester_id, class: "form-control", value: @current_user.id %>
   </div>
   
   <div class="form-group">
     <%= label f, :assignee_id, class: "control-label" %>
-    <%= text_input f, :assignee_id, class: "form-control" %>
+    <%= select f, :assignee_id, @userlist, class: "form-control" %>
     <%= error_tag f, :assignee_id %>
   </div>
 

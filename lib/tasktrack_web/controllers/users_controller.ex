@@ -18,7 +18,7 @@ defmodule TaskTrackWeb.UsersController do
     case Accounts.create_users(users_params) do
       {:ok, users} ->
         conn
-        |> put_flash(:info, "Users created successfully.")
+        |> put_flash(:info, "User created successfully.")
         |> redirect(to: users_path(conn, :show, users))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -54,7 +54,7 @@ defmodule TaskTrackWeb.UsersController do
     {:ok, _users} = Accounts.delete_users(users)
 
     conn
-    |> put_flash(:info, "Users deleted successfully.")
+    |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: users_path(conn, :index))
   end
 end

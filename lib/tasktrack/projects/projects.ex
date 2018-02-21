@@ -5,6 +5,7 @@ defmodule TaskTrack.Projects do
 
   import Ecto.Query, warn: false
   alias TaskTrack.Repo
+  alias TaskTrack.Accounts
 
   alias TaskTrack.Projects.Tasks
 
@@ -19,6 +20,16 @@ defmodule TaskTrack.Projects do
   """
   def list_tasks do
     Repo.all(Tasks)
+  end
+  
+  def list_tasks_with_requester(requester) do
+    Repo.all(Tasks)
+    |> Enum.filter(fn(x) -> x.requester_id == requester end)
+  end
+  
+  def list_tasks_with_assignee(assignee) do
+    Repo.all(Tasks)
+    |> Enum.filter(fn(x) -> x.assignee_id == assignee end)
   end
 
   @doc """
@@ -54,6 +65,10 @@ defmodule TaskTrack.Projects do
 
   """
   def create_tasks(attrs \\ %{}) do
+    attrs = attrs
+    |> Map.put("requester_id", Accounts.get_users(attrs |> Map.get("requester_id")))
+    |> Map.put("assignee_id", Accounts.get_users(attrs |> Map.get("assignee_id")))
+    IO.inspect(attrs)
     %Tasks{}
     |> Tasks.changeset(attrs)
     |> Repo.insert()

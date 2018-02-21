@@ -8,7 +8,7 @@ defmodule TaskTrack.Repo.Migrations.CreateTasks do
       add :est_time, :integer, default: 0
       add :act_time, :integer, default: 0
       add :completed, :boolean, default: false, null: false
-      add :requester_id, references(:users, on_delete: :nothing)
+      add :requester_id, references(:users, on_delete: :delete_all), null: false
       add :assignee_id, references(:users, on_delete: :nothing)
 
       timestamps()

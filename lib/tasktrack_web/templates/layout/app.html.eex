@@ -16,16 +16,20 @@
       <!-- header adapted from nat's notes -->
       <!-- http://www.ccs.neu.edu/home/ntuck/courses/2018/01/cs4550/notes/12-microblog/notes.html --> 
       <div class="row">
-	<div class="col-3 offset-9">
-	  <%= if @current_user do %>
+	<%= if @current_user do %>
+	  <div class="col-5 offset-7">
 	    <p>
 	      Logged in as: <%= @current_user.name %> |
+	      <%= link "Your Profile", to: users_path(@conn, :show, @current_user) %> |
+	      <%= link "Show Tasks", to: tasks_path(@conn, :index) %> |
 	      <%= link "Log Out", to: "/session", method: :delete %>
 	    </p>
-	  <% else %>
+	  </div>
+	<% else %>
+   	  <div class="col-2 offset-10">
 	    <p>Not logged in.</p>
-	  <% end %>
-	</div>
+	  </div>
+	<% end %>
       </div>
       <%= if get_flash(@conn, :info) do %>
 	<p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
