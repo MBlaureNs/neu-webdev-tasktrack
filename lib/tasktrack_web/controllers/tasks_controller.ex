@@ -15,7 +15,7 @@ defmodule TaskTrackWeb.TasksController do
     changeset = Projects.change_tasks(%Tasks{})
     # https://stackoverflow.com/questions/33805309/how-to-show-all-records-of-a-model-in-phoenix-select-field
     userlist = Repo.all(Users) |> Enum.map(&{&1.name<>" ("<>&1.username<>")", &1.id})
-    render(conn, "new.html", changeset: changeset, userlist: userlist)
+    render(conn, "new.html", changeset: changeset, userlist: userlist, tasks: nil)
   end
 
   def create(conn, %{"tasks" => tasks_params}) do
