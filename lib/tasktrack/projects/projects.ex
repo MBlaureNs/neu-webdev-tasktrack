@@ -35,7 +35,11 @@ defmodule TaskTrack.Projects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_tasks!(id), do: Repo.get!(Tasks, id)
+  def get_tasks!(id) do
+    Repo.get!(Tasks, id)
+    |> Repo.preload(:requester)
+    |> Repo.preload(:assignee)
+  end
 
   @doc """
   Creates a tasks.

@@ -1,5 +1,4 @@
 <h2>Show Tasks</h2>
-
 <ul>
 
   <li>
@@ -27,6 +26,24 @@
     <%= @tasks.completed %>
   </li>
 
+  <li>
+    <strong>Requester:</strong>
+    <%= if @tasks.requester_id do %>
+      <%= @tasks.requester_id.name %>
+    <% else %>
+      None
+    <% end %>
+  </li>
+
+  <li>
+    <strong>Assignee:</strong>
+    <%= if @tasks.assignee_id do %>
+      <%= @tasks.assignee_id.name %>
+    <% else %>
+      None
+    <% end %>
+  </li>
+  
 </ul>
 
 <span><%= link "Edit", to: tasks_path(@conn, :edit, @tasks) %></span>

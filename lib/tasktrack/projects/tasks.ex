@@ -10,8 +10,8 @@ defmodule TaskTrack.Projects.Tasks do
     field :desc, :string
     field :est_time, :integer
     field :title, :string
-    field :requester_id, :id
-    field :assignee_id, :id
+    belongs_to :requester, TaskTrack.Accounts.Users
+    belongs_to :assignee, TaskTrack.Accounts.Users
 
     timestamps()
   end

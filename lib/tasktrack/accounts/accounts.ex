@@ -36,6 +36,9 @@ defmodule TaskTrack.Accounts do
 
   """
   def get_users!(id), do: Repo.get!(Users, id)
+  
+  def get_users(id), do: Repo.get(Users, id)
+  def get_users_by_username(username), do: Repo.get_by(Users, username: username)
 
   @doc """
   Creates a users.
