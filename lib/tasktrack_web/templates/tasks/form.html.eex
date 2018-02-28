@@ -73,7 +73,11 @@
   
   <div class="form-group">
     <%= label f, :assignee_id, class: "control-label" %>
-    <%= select f, :assignee_id, @userlist, class: "form-control" %>
+    <%= if length(@assignees) == 0 do %>
+      <br/>No assignees available: add managees to proceed<br/>
+    <% else %>
+      <%= select f, :assignee_id, @assignees, class: "form-control" %>
+    <%= end %>
     <%= error_tag f, :assignee_id %>
   </div>
 

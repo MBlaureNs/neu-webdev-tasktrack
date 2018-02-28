@@ -1,19 +1,57 @@
-<h2>User ID: <%= @users.id %></h2>
+<script>
+  window.manager_path = "<%= manager_path(@conn, :index) %>";
+  window.current_user_id = "<%= @current_user.id %>";
+</script>
+
+
+<h2>User ID: <%= @user.id %></h2>
 
 <ul>
-
   <li>
     <strong>Username:</strong>
-    <%= @users.username %>
+    <%= @user.username %>
   </li>
 
   <li>
     <strong>Name:</strong>
-    <%= @users.name %>
+    <%= @user.name %>
   </li>
 
+  <li>
+    <strong>Managers:</strong>
+    <ul>
+    <%= for {m, r} <- @managers do %>
+      <li>
+	<%= link m, to: users_path(@conn, :show, m)  %>
+      </li>
+    <% end %>
+    </ul>
+  </li>
+  
+  <li>
+    <strong>Managees:</strong>
+    <ul>
+    <%= for {m, r} <- @managees do %>
+      <li>
+	<%= link m, to: users_path(@conn, :show, m)  %>
+      </li>
+    <% end %>
+    </ul>
+  </li>
+  <hr/>
 </ul>
-
-<span><%= link "Edit User", to: users_path(@conn, :edit, @users) %></span>
+  
+<button class="manager-button btn btn-default"
+        data-user-id="<%= @user.id %>"
+        data-manager="<%= @managees[@current_user.id] %>">
+  Add as manager
+</button>
+<button class="managee-button btn btn-default"
+        data-user-id="<%= @user.id %>"
+        data-managee="<%= @managers[@current_user.id] %>">
+  Add as managee
+</button>
+<br/>
+<span><%= link "Edit User", to: users_path(@conn, :edit, @user) %></span>
 <br/>
 <span><%= link "List All Users", to: users_path(@conn, :index) %></span>

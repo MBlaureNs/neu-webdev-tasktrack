@@ -26,8 +26,10 @@ defmodule TaskTrackWeb.UsersController do
   end
 
   def show(conn, %{"id" => id}) do
-    users = Accounts.get_users!(id)
-    render(conn, "show.html", users: users)
+    user = Accounts.get_users!(id)
+    managers = TaskTrack.Accounts.managers_map_for(user.id)
+    managees = TaskTrack.Accounts.managees_map_for(user.id)
+    render(conn, "show.html", user: user, managers: managers, managees: managees)
   end
 
   def edit(conn, %{"id" => id}) do

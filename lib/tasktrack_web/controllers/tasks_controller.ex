@@ -2,6 +2,7 @@ defmodule TaskTrackWeb.TasksController do
   use TaskTrackWeb, :controller
   
   alias TaskTrack.Repo
+  alias TaskTrack.Accounts
   alias TaskTrack.Accounts.Users
   alias TaskTrack.Projects
   alias TaskTrack.Projects.Tasks
@@ -15,7 +16,11 @@ defmodule TaskTrackWeb.TasksController do
     changeset = Projects.change_tasks(%Tasks{})
     # https://stackoverflow.com/questions/33805309/how-to-show-all-records-of-a-model-in-phoenix-select-field
     userlist = Repo.all(Users) |> Enum.map(&{&1.name<>" ("<>&1.username<>")", &1.id})
-    render(conn, "new.html", changeset: changeset, userlist: userlist, tasks: nil)
+    assignees = conn.assigns.current_user.id
+    |> Accounts.managees_map_for
+    |> Enum.map(fn({m, _}) -> {Accounts.get_users(m).name<>" ("<>Accounts.get_users(m).name<>")", m} end)
+    
+    render(conn, "new.html", changeset: changeset, userlist: userlist, tasks: nil, assignees: assignees)
   end
 
   def create(conn, %{"tasks" => tasks_params}) do
@@ -26,7 +31,11 @@ defmodule TaskTrackWeb.TasksController do
         |> redirect(to: tasks_path(conn, :show, tasks))
       {:error, %Ecto.Changeset{} = changeset} ->
 	userlist = Repo.all(Users) |> Enum.map(&{&1.name<>" ("<>&1.username<>")", &1.id})
-        render(conn, "new.html", changeset: changeset, userlist: userlist)
+	assignees = conn.assigns.current_user.id
+	|> Accounts.managees_map_for
+	|> Enum.map(fn({m, _}) -> {Accounts.get_users(m).name<>" ("<>Accounts.get_users(m).name<>")", m} end)
+    
+        render(conn, "new.html", changeset: changeset, userlist: userlist, tasks: nil, assignees: assignees)
     end
   end
 
@@ -39,7 +48,11 @@ defmodule TaskTrackWeb.TasksController do
     tasks = Projects.get_tasks!(id)
     changeset = Projects.change_tasks(tasks)
     userlist = Repo.all(Users) |> Enum.map(&{&1.name<>" ("<>&1.username<>")", &1.id})
-    render(conn, "edit.html", tasks: tasks, changeset: changeset, userlist: userlist)
+    assignees = conn.assigns.current_user.id
+    |> Accounts.managees_map_for
+    |> Enum.map(fn({m, r}) -> {Accounts.get_users(m).name<>" ("<>Accounts.get_users(m).name<>")", m} end)
+    
+    render(conn, "edit.html", tasks: tasks, changeset: changeset, userlist: userlist, assignees: assignees)
   end
 
   def update(conn, %{"id" => id, "tasks" => tasks_params}) do
