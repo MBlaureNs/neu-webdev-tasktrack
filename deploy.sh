@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export PORT=5101
+export PORT=5102
 export MIX_ENV=prod
-export GIT_PATH=/home/memory/src/tasktrack 
+export GIT_PATH=/home/memory/src/tasks2 
 
 PWD=`pwd`
 if [ $PWD != $GIT_PATH ]; then
@@ -28,21 +28,21 @@ mkdir -p ~/www
 mkdir -p ~/old
 
 NOW=`date +%s`
-if [ -d ~/www/tasktrack ]; then
-	echo mv ~/www/tasktrack ~/old/$NOW
-	mv ~/www/tasktrack ~/old/$NOW
+if [ -d ~/www/tasks2 ]; then
+	echo mv ~/www/tasks2 ~/old/$NOW
+	mv ~/www/tasks2 ~/old/$NOW
 fi
 
-mkdir -p ~/www/tasktrack
-REL_TAR=~/src/tasktrack/_build/prod/rel/tasktrack/releases/0.0.1/tasktrack.tar.gz
-(cd ~/www/tasktrack && tar xzvf $REL_TAR)
+mkdir -p ~/www/tasks2
+REL_TAR=~/src/tasks2/_build/prod/rel/tasktrack/releases/0.0.1/tasktrack.tar.gz
+(cd ~/www/tasks2 && tar xzvf $REL_TAR)
 
 MIX_ENV=prod mix ecto.create
 MIX_ENV=prod mix ecto.migrate
 
 
 crontab - <<CRONTAB
-@reboot bash /home/memory/src/tasktrack/start.sh
+@reboot bash /home/memory/src/tasks2/start.sh
 CRONTAB
 
 #. start.sh

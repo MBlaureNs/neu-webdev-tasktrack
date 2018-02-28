@@ -67,7 +67,7 @@
       <br/>No assignees available: add managees to proceed<br/>
     <% else %>
       <%= select f, :assignee_id, @assignees, class: "form-control" %>
-    <%= end %>
+    <% end %>
     <%= error_tag f, :assignee_id %>
   </div>
 
