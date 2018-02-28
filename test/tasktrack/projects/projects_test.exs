@@ -70,4 +70,66 @@ defmodule TaskTrack.ProjectsTest do
       assert %Ecto.Changeset{} = Projects.change_tasks(tasks)
     end
   end
+
+  describe "timeblocks" do
+    alias TaskTrack.Projects.Timeblock
+
+    @valid_attrs %{end: "2010-04-17 14:00:00.000000Z", start: "2010-04-17 14:00:00.000000Z"}
+    @update_attrs %{end: "2011-05-18 15:01:01.000000Z", start: "2011-05-18 15:01:01.000000Z"}
+    @invalid_attrs %{end: nil, start: nil}
+
+    def timeblock_fixture(attrs \\ %{}) do
+      {:ok, timeblock} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Projects.create_timeblock()
+
+      timeblock
+    end
+
+    test "list_timeblocks/0 returns all timeblocks" do
+      timeblock = timeblock_fixture()
+      assert Projects.list_timeblocks() == [timeblock]
+    end
+
+    test "get_timeblock!/1 returns the timeblock with given id" do
+      timeblock = timeblock_fixture()
+      assert Projects.get_timeblock!(timeblock.id) == timeblock
+    end
+
+    test "create_timeblock/1 with valid data creates a timeblock" do
+      assert {:ok, %Timeblock{} = timeblock} = Projects.create_timeblock(@valid_attrs)
+      assert timeblock.end == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+      assert timeblock.start == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+    end
+
+    test "create_timeblock/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Projects.create_timeblock(@invalid_attrs)
+    end
+
+    test "update_timeblock/2 with valid data updates the timeblock" do
+      timeblock = timeblock_fixture()
+      assert {:ok, timeblock} = Projects.update_timeblock(timeblock, @update_attrs)
+      assert %Timeblock{} = timeblock
+      assert timeblock.end == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+      assert timeblock.start == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+    end
+
+    test "update_timeblock/2 with invalid data returns error changeset" do
+      timeblock = timeblock_fixture()
+      assert {:error, %Ecto.Changeset{}} = Projects.update_timeblock(timeblock, @invalid_attrs)
+      assert timeblock == Projects.get_timeblock!(timeblock.id)
+    end
+
+    test "delete_timeblock/1 deletes the timeblock" do
+      timeblock = timeblock_fixture()
+      assert {:ok, %Timeblock{}} = Projects.delete_timeblock(timeblock)
+      assert_raise Ecto.NoResultsError, fn -> Projects.get_timeblock!(timeblock.id) end
+    end
+
+    test "change_timeblock/1 returns a timeblock changeset" do
+      timeblock = timeblock_fixture()
+      assert %Ecto.Changeset{} = Projects.change_timeblock(timeblock)
+    end
+  end
 end

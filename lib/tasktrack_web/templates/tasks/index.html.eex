@@ -6,7 +6,6 @@
       <th>Title</th>
       <th>Desc</th>
       <th>Est time</th>
-      <th>Act time</th>
       <th>Completed</th>
       <th>Requester</th>
       <th>Assignee</th>
@@ -19,7 +18,6 @@
       <td><%= tasks.title %></td>
       <td><%= tasks.desc %></td>
       <td><%= tasks.est_time %></td>
-      <td><%= tasks.act_time %></td>
       <td>
 	<%= if tasks.completed do %>
 	  Y

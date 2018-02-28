@@ -44,9 +44,17 @@ function update_buttons() {
       $(bb).text("Add as managee");
     }
   });
+
+  $('.working-button').each( (_, bb) => {
+    let task_id = $(bb).data('task-id');
+    let timeblock = $(bb).data('timeblock');
+    if (timeblock != "") {
+      $(bb).text("Stop working");
+    } else {
+      $(bb).text("Start working");
+    }
+  });
 }
-
-
 
 
 function set_manager_button(user_id, value) {
@@ -67,6 +75,16 @@ function set_managee_button(user_id, value) {
   update_buttons();
 }
 
+
+function set_working_button(task_id, value) {
+  $('.working-button').each( (_, bb) => {
+    if (task_id == $(bb).data('task-id')) {
+      $(bb).data('timeblock', value);
+    }
+  });
+  update_buttons();
+}
+
 function add_manager(user_id) {
   let text = JSON.stringify({
     manager: {
@@ -80,7 +98,10 @@ function add_manager(user_id) {
     dataType: "json",
     contentType: "application/json; charset=UTF-8",
     data: text,
-    success: (resp) => { set_manager_button(user_id, resp.data.id); }
+    success: (resp) => {
+      set_manager_button(user_id, resp.data.id);
+      location.reload();
+    }
   });
 }
 
@@ -90,7 +111,10 @@ function remove_manager(user_id, manage_id) {
     dataType: "json",
     contentType: "application/json; charset=UTF-8",
     data: "",
-    success: () => { set_manager_button(user_id, ""); }
+    success: () => {
+      set_manager_button(user_id, "");
+      location.reload();
+    }
   });
 }
 
@@ -107,7 +131,10 @@ function add_managee(user_id) {
     dataType: "json",
     contentType: "application/json; charset=UTF-8",
     data: text,
-    success: (resp) => { set_managee_button(user_id, resp.data.id); }
+    success: (resp) => {
+      set_managee_button(user_id, resp.data.id);
+      location.reload();
+    }
   });
 }
 
@@ -117,7 +144,47 @@ function remove_managee(user_id, manage_id) {
     dataType: "json",
     contentType: "application/json; charset=UTF-8",
     data: "",
-    success: () => { set_managee_button(user_id, ""); }
+    success: () => {
+      set_managee_button(user_id, "");
+      location.reload();
+    }
+  });
+}
+
+function start_timeblock(task_id) {
+  let text = JSON.stringify({
+    timeblock: {
+      task_id: task_id,
+    }
+  });
+
+  $.ajax(timeblock_path, {
+    method: "post",
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8",
+    data: text,
+    success: (resp) => {
+      set_working_button(task_id, resp.data.id); 
+      location.reload();
+    }
+  });
+}
+
+function stop_timeblock(task_id, timeblock_id) {
+  let text = JSON.stringify({
+    timeblock: {
+      end: null
+    }
+  });
+  $.ajax(timeblock_path + "/" + timeblock_id, {
+    method: "patch",
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8",
+    data: text,
+    success: () => {
+      set_working_button(task_id, "");
+      location.reload();
+    }
   });
 }
 
@@ -145,6 +212,18 @@ function managee_click(ev) {
   }
 }
 
+function working_click(ev) {
+  let btn = $(ev.target);
+  let task_id = btn.data('task-id')
+  let timeblock_id = btn.data('timeblock');
+
+  if (timeblock_id != "") {
+    stop_timeblock(task_id, timeblock_id)
+  } else {
+    start_timeblock(task_id);
+  }
+}
+
 function init_manage() {
   if (!$('.manager-button')) {
     return
@@ -155,4 +234,14 @@ function init_manage() {
   update_buttons();
 }
 
+function init_working() {
+  if (!$('.working-button')) {
+    return
+  }
+
+  $('.working-button').click(working_click);
+  update_buttons();
+}
+
 $(init_manage);
+$(init_working);

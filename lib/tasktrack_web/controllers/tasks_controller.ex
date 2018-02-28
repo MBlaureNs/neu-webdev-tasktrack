@@ -41,7 +41,12 @@ defmodule TaskTrackWeb.TasksController do
 
   def show(conn, %{"id" => id}) do
     tasks = Projects.get_tasks!(id)
-    render(conn, "show.html", tasks: tasks)
+    curtimeblock = Projects.get_curtimeblock(id)
+    curtimeblock = if is_nil(curtimeblock) do nil else curtimeblock.id end
+    timeblocks = Projects.list_timeblocks()
+    |> Enum.filter(fn(t) -> Integer.to_string(t.task_id) == id end)
+    
+    render(conn, "show.html", tasks: tasks, curtimeblock: curtimeblock, timeblocks: timeblocks)
   end
 
   def edit(conn, %{"id" => id}) do

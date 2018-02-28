@@ -36,16 +36,6 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :act_time, class: "control-label" %>
-    <%= if is_nil(@tasks) or @tasks.assignee == @current_user do %>
-      <%= number_input f, :act_time, class: "form-control", step: 15 %>
-      <%= error_tag f, :act_time %>
-    <% else %>
-      <br/><%= @tasks.act_time %>
-    <% end %>
-  </div>
-
-  <div class="form-group">
     <%= label f, :completed, class: "control-label" %>
     <%= if is_nil(@tasks) or @tasks.assignee == @current_user or @tasks.requester == @current_user do %>
       <%= checkbox f, :completed, class: "checkbox" %>

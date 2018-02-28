@@ -29,7 +29,7 @@ defmodule TaskTrackWeb.Router do
     get "/", PageController, :index
     resources "/users", UsersController
     resources "/tasks", TasksController
-
+    
     post "/session", SessionController, :create
     delete "/session", SessionController, :delete
   end
@@ -37,5 +37,6 @@ defmodule TaskTrackWeb.Router do
   scope "/api/v1", TaskTrackWeb do
     pipe_through :api
     resources "/manages", ManagerController, except: [:new, :edit]
+    resources "/timeblocks", TimeblockController, except: [:new, :edit]
   end
 end

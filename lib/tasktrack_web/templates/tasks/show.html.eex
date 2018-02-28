@@ -1,3 +1,8 @@
+<script>
+  window.timeblock_path = "<%= timeblock_path(@conn, :index) %>";
+  window.current_user_id = "<%= @current_user.id %>";
+</script>
+
 <h2>Show Task ID: <%= @tasks.id %></h2>
 <ul>
 
@@ -14,11 +19,6 @@
   <li>
     <strong>Est time:</strong>
     <%= @tasks.est_time %>
-  </li>
-
-  <li>
-    <strong>Act time:</strong>
-    <%= @tasks.act_time %>
   </li>
 
   <li>
@@ -52,3 +52,32 @@
 
 <span><%= link "Edit", to: tasks_path(@conn, :edit, @tasks) %></span>
 <span><%= link "Back", to: tasks_path(@conn, :index) %></span>
+
+<hr/>
+
+<h2>Time blocks</h2>
+
+<%= if @conn.assigns.current_user.id == @tasks.assignee_id do %>
+  <button class="working-button btn btn-default"
+	  data-task-id="<%= @tasks.id %>"
+	  data-timeblock="<%= @curtimeblock %>">
+    Start working
+</button>
+<% end %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Start time</th>
+      <th>End time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for t <- @timeblocks do %>
+    <tr>
+      <td><%= t.start %></td>
+      <td><%= t.end %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
