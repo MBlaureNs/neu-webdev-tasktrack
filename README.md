@@ -1,3 +1,20 @@
+# Notes
+design decisions:
+
+all users may list all other users as managers and managees:
+since there is no "project lead" type role and since the app currently supports
+only one project, it seems that this app will most likely be used by a team
+using a loose and informal style of management. as a result, the user experience
+barrier to assigning managers and managees has been intentionally made very low.
+
+for similar reasons, users are allowed to have multiple managers as well as
+multiple managees.
+
+task reports are displayed on users' profile pages. since all task and user
+info are globally visible anyway, there is no need to limit viewing managee
+reports to only their respective managers.
+
+
 # TaskTrack
 
 To start your Phoenix server:
