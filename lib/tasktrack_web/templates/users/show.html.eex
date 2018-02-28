@@ -20,9 +20,9 @@
   <li>
     <strong>Managers:</strong>
     <ul>
-    <%= for {m, r} <- @managers do %>
+    <%= for {n, m} <- @managernames do %>
       <li>
-	<%= link m, to: users_path(@conn, :show, m)  %>
+	<%= link n, to: users_path(@conn, :show, m)  %>
       </li>
     <% end %>
     </ul>
@@ -31,9 +31,9 @@
   <li>
     <strong>Managees:</strong>
     <ul>
-    <%= for {m, r} <- @managees do %>
+    <%= for {n, m} <- @manageenames do %>
       <li>
-	<%= link m, to: users_path(@conn, :show, m)  %>
+	<%= link n, to: users_path(@conn, :show, m)  %>
       </li>
     <% end %>
     </ul>
@@ -55,3 +55,60 @@
 <span><%= link "Edit User", to: users_path(@conn, :edit, @user) %></span>
 <br/>
 <span><%= link "List All Users", to: users_path(@conn, :index) %></span>
+<br/>
+<br/>
+<hr/>
+<hr/>
+
+<h2>Managee Task Report</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Desc</th>
+      <th>Est time</th>
+      <th>Act time</th>
+      <th>Completed</th>
+      <th>Requester</th>
+      <th>Assignee</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for tasks <- @tasks do %>
+    <tr>
+      <td><%= tasks.title %></td>
+      <td><%= tasks.desc %></td>
+      <td><%= tasks.est_time %></td>
+      <td><%= tasks.act_time %></td>
+      <td>
+	<%= if tasks.completed do %>
+	  Y
+	<% else %>
+	  N
+	<% end %>
+      </td>
+      <td>
+	<%= if tasks.requester_id do %>
+	  <%= tasks.requester.name %> (<%= tasks.requester.username %>)
+	<% else %>
+	  None
+	<% end %>
+      </td>
+      <td>
+	<%= if tasks.assignee_id do %>
+	  <%= tasks.assignee.name %> (<%= tasks.assignee.username %>)
+	<% else %>
+	  None
+	<% end %>
+      </td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: tasks_path(@conn, :show, tasks), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: tasks_path(@conn, :edit, tasks), class: "btn btn-default btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

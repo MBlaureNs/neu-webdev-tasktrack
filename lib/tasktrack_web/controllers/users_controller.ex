@@ -1,8 +1,11 @@
 defmodule TaskTrackWeb.UsersController do
   use TaskTrackWeb, :controller
 
+  alias TaskTrack.Repo
   alias TaskTrack.Accounts
   alias TaskTrack.Accounts.Users
+  alias TaskTrack.Projects
+  alias TaskTrack.Projects.Tasks
 
   def index(conn, _params) do
     users = Accounts.list_users()
@@ -27,9 +30,17 @@ defmodule TaskTrackWeb.UsersController do
 
   def show(conn, %{"id" => id}) do
     user = Accounts.get_users!(id)
-    managers = TaskTrack.Accounts.managers_map_for(user.id)
-    managees = TaskTrack.Accounts.managees_map_for(user.id)
-    render(conn, "show.html", user: user, managers: managers, managees: managees)
+    managers = Accounts.managers_map_for(user.id)
+    managernames = managers
+    |> Enum.map(fn({m, _}) -> {Accounts.get_users(m).name<>" ("<>Accounts.get_users(m).username<>")", m} end)
+    managees = Accounts.managees_map_for(user.id)
+    manageenames = managees
+    |> Enum.map(fn({m, _}) -> {Accounts.get_users(m).name<>" ("<>Accounts.get_users(m).username<>")", m} end)
+    manageeids = managees
+    |> Enum.map(fn({m, _}) -> m end)
+    tasks = Projects.list_tasks() 
+    |> Enum.filter(fn(t) -> Enum.member?(manageeids, t.assignee_id) end)
+    render(conn, "show.html", user: user, managers: managers, managees: managees, managernames: managernames, manageenames: manageenames, tasks: tasks)
   end
 
   def edit(conn, %{"id" => id}) do
